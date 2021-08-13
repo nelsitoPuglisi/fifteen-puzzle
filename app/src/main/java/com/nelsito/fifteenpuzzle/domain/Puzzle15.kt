@@ -7,6 +7,8 @@ data class Puzzle15(val tiles: List<Int>) {
 
     private val size = 4
 
+    //TODO: Extract movements as objects so when the player clicks a tile
+    // it returns the proper movement to apply to the Puzzle
     fun down(): Puzzle15 {
         val blankIndex = tiles.indexOf(0)
 
