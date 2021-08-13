@@ -11,8 +11,18 @@ data class Puzzle15(val tiles: List<Int>) {
         val blankIndex = tiles.indexOf(0)
 
         //only if blank tile is not at the top row: i.e. index >= size
-        if (blankIndex <= 3) return Puzzle15(tiles)
+        if (blankIndex < size) return Puzzle15(tiles)
         val targetIndex = blankIndex - size
+
+        return moveTiles(blankIndex, targetIndex)
+    }
+
+    fun up(): Puzzle15 {
+        val blankIndex = tiles.indexOf(0)
+
+        //only if blank tile is not at the bottom row: i.e. index >= size
+        if (blankIndex > (size * size - size)) return Puzzle15(tiles)
+        val targetIndex = blankIndex + size
 
         return moveTiles(blankIndex, targetIndex)
     }
@@ -20,9 +30,19 @@ data class Puzzle15(val tiles: List<Int>) {
     fun right(): Puzzle15 {
         val blankIndex = tiles.indexOf(0)
 
-        //only if blank tile is not at the first column: i.e. index % size > 0
+        //only if blank tile is not at the first column: i.e. index % size = 0
         if (blankIndex % size == 0) return Puzzle15(tiles)
         val targetIndex = blankIndex - 1
+
+        return moveTiles(blankIndex, targetIndex)
+    }
+
+    fun left(): Puzzle15 {
+        val blankIndex = tiles.indexOf(0)
+
+        //only if blank tile is not at the first column: i.e. index % size = size - 1
+        if (blankIndex % size == size - 1) return Puzzle15(tiles)
+        val targetIndex = blankIndex + 1
 
         return moveTiles(blankIndex, targetIndex)
     }
