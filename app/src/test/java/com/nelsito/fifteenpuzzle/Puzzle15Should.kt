@@ -28,6 +28,17 @@ class Puzzle15Should {
     }
 
     @Test
+    fun `move right from 11 to 0`() {
+        //given
+        val aPuzzle = aSamplePuzzle()
+        //when
+        val actual = aPuzzle.right()
+        //then
+        val expected = Puzzle15(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 13, 14, 0, 11))
+        assertThat(actual).isEqualTo(expected)
+    }
+
+    @Test
     fun `not move down if blank is at top row`() {
         //given
         val tiles = listOf(1, 2, 3, 0, 4, 5, 6, 7, 8, 9, 10, 12, 15, 13, 14, 11)
