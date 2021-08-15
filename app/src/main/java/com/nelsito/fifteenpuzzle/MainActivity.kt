@@ -53,6 +53,15 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        mainViewModel.loading.observe(this, {
+            binding.btnStart.isEnabled = !it
+            if (it) {
+                binding.progressCircular.visibility = View.VISIBLE
+            } else {
+                binding.progressCircular.visibility = View.GONE
+            }
+        })
+
         binding.btnStart.setOnClickListener {
             mainViewModel.start()
         }

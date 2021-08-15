@@ -27,7 +27,12 @@ class MainViewModel : ViewModel() {
     private val _currentPuzzle = MutableLiveData(puzzle15)
     val currentPuzzle: LiveData<Puzzle15> get() = _currentPuzzle
 
+    private val _loading = MutableLiveData(false)
+    val loading: LiveData<Boolean> get() = _loading
+
     fun start() {
+
+        _loading.value = true
 
         puzzle15 = aSamplePuzzle()
 
@@ -41,6 +46,8 @@ class MainViewModel : ViewModel() {
             _pieces.value = puzzle15.tiles.map {
                 BitmapTile(splitted[it.correctNumber - 1], it)
             }
+
+            _loading.value = false
         }
     }
 
