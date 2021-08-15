@@ -21,6 +21,9 @@ class MainViewModel : ViewModel() {
     private val _pieces = MutableLiveData<List<BitmapTile>>()
     val pieces: LiveData<List<BitmapTile>> get() = _pieces
 
+    private val _solved = MutableLiveData(false)
+    val solved: LiveData<Boolean> get() = _solved
+
     //TODO: Create a shuffled puzzle
     private var puzzle15 = aSamplePuzzle()
 
@@ -35,8 +38,6 @@ class MainViewModel : ViewModel() {
         _loading.value = true
 
         puzzle15 = aSamplePuzzle()
-
-        //TODO: Load image from api
 
         viewModelScope.launch {
             val photo = photoRepository.getRandom()
@@ -54,6 +55,10 @@ class MainViewModel : ViewModel() {
     fun tileClicked(tile: Tile) : Tile {
         puzzle15 = tile.movement.move(puzzle15)
         _currentPuzzle.value = puzzle15
+
+        //if it's solved finish
+        _solved.value = puzzle15.isSolved()
+
         return puzzle15.tiles.first { tile.correctNumber == it.correctNumber }
     }
 

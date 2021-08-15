@@ -77,6 +77,10 @@ data class Puzzle15(val tilesPosition: List<Int>, val size: Int = 4) {
         return Tile(tilesPosition[index], index, movement)
     }
 
+    fun isSolved(): Boolean {
+        return tilesPosition == listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0)
+    }
+
 }
 
 class Left : Movement {
