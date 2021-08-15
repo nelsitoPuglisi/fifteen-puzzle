@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.activity.viewModels
@@ -19,8 +20,8 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        mainViewModel.pieces.observe(this, { pieces ->
-            binding.tile1.setImageBitmap(pieces[0])
+        mainViewModel.pieces.observe(this, { tiles ->
+            /*binding.tile1.setImageBitmap(pieces[0])
             binding.tile2.setImageBitmap(pieces[1])
             binding.tile3.setImageBitmap(pieces[2])
             binding.tile4.setImageBitmap(pieces[3])
@@ -34,19 +35,38 @@ class MainActivity : AppCompatActivity() {
             binding.tile12.setImageBitmap(pieces[11])
             binding.tile13.setImageBitmap(pieces[12])
             binding.tile14.setImageBitmap(pieces[13])
-            binding.tile15.setImageBitmap(pieces[14])
+            binding.tile15.setImageBitmap(pieces[14])*/
+            tiles.forEach {
+                val iv = ImageView(applicationContext)
+                iv.setImageBitmap(it.bitmap)
+                iv.tag = it
+
+                it.startIndex % 4
+                val right =
+                (iv.layoutParams as RelativeLayout.LayoutParams).addRule(RelativeLayout.ALIGN_RIGHT, )
+
+                binding.board.addView(iv)
+            }
             //TODO position each image as the puzzle suggest
+
         })
 
-        //TODO: load from unsplash api
-        val bitmapDrawable = getDrawable(R.drawable.unsplash) as BitmapDrawable
 
-        mainViewModel.onCreate(cropAndScale(bitmapDrawable.bitmap))
+        binding.btnStart.setOnClickListener {
+            //TODO: load from unsplash api
+            val bitmapDrawable = getDrawable(R.drawable.unsplash) as BitmapDrawable
+            mainViewModel.start(cropAndScale(bitmapDrawable.bitmap))
+        }
     }
 
     private fun cropAndScale(bitmap: Bitmap): Bitmap {
+        val cropped = crop(bitmap)
         //TODO Scale image to square relative layout size
-        return crop(bitmap)
+        Log.d("SCALE", "cropped.w: " + cropped.width)
+        Log.d("SCALE", "cropped.h: " + cropped.height)
+        Log.d("SCALE", "layout.w: " + binding.board.width)
+        Log.d("SCALE", "layout.h: " + binding.board.height)
+        return cropped
     }
 
     private fun crop(bitmap: Bitmap): Bitmap {
