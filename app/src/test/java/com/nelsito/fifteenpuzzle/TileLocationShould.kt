@@ -1,6 +1,5 @@
 package com.nelsito.fifteenpuzzle
 
-import android.graphics.Bitmap
 import com.nhaarman.mockitokotlin2.mock
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test

@@ -1,40 +1,41 @@
 package com.nelsito.fifteenpuzzle
 
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.service.quicksettings.TileService
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.nelsito.fifteenpuzzle.domain.Down
+import com.nelsito.fifteenpuzzle.domain.None
 import com.nelsito.fifteenpuzzle.domain.Puzzle15
 
 
 class MainViewModel : ViewModel() {
 
-    private val _pieces = MutableLiveData<List<Tile>>()
-    val pieces: LiveData<List<Tile>> get() = _pieces
+    private val _pieces = MutableLiveData<List<BitmapTile>>()
+    val pieces: LiveData<List<BitmapTile>> get() = _pieces
+
+    //TODO: Create a shuffled puzzle
+    private var puzzle15 = aSamplePuzzle()
+
+    private val _currentPuzzle = MutableLiveData(puzzle15)
+    val currentPuzzle: LiveData<Puzzle15> get() = _currentPuzzle
 
     fun start(scaledBitmap: Bitmap) {
+
+        puzzle15 = aSamplePuzzle()
+
         //TODO: Load image from api
         val splitted = splitImage(scaledBitmap)
 
-        //TODO: Create a shuffled puzzle
-        val puzzle15 = aSamplePuzzle()
-
-        _pieces.value = createTiles(puzzle15, splitted)
+        _pieces.value = puzzle15.tiles.map {
+            BitmapTile(splitted[it.correctNumber - 1], it)
+        }
     }
 
-    private fun createTiles(puzzle15: Puzzle15, splitted: List<Bitmap>): List<Tile> {
-        val tiles = mutableListOf<Tile>()
-        //tile 0 is blank
-        //tile 1 should be index 0
-        for (index in puzzle15.tiles.indices) {
-            if (puzzle15.tiles[index] > 0) {
-                tiles.add(Tile(puzzle15.tiles[index], index, splitted[puzzle15.tiles[index] - 1]))
-            }
-        }
-
-        return tiles
+    fun tileClicked(tile: Tile) : Tile {
+        puzzle15 = tile.movement.move(puzzle15)
+        _currentPuzzle.value = puzzle15
+        return puzzle15.tiles.first { tile.correctNumber == it.correctNumber }
     }
 
     private fun aSamplePuzzle(): Puzzle15 {
@@ -67,5 +68,7 @@ class MainViewModel : ViewModel() {
 
 
 }
+
+data class BitmapTile(val bitmap: Bitmap, val tile: Tile)
 
 data class TileLocation(val left: Int, val top: Int)

@@ -85,4 +85,7 @@ class Puzzle15Should {
 
         return Puzzle15(tiles)
     }
+
+    //Every Puzzle15 already has allowed movements for some tiles.
+    //
 }
