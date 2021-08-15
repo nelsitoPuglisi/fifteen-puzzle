@@ -5,9 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nelsito.fifteenpuzzle.domain.Down
-import com.nelsito.fifteenpuzzle.domain.None
 import com.nelsito.fifteenpuzzle.domain.Puzzle15
+import com.nelsito.fifteenpuzzle.domain.Shuffler
 import com.nelsito.fifteenpuzzle.infrastructure.PhotoRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -24,20 +23,22 @@ class MainViewModel : ViewModel() {
     private val _solved = MutableLiveData(false)
     val solved: LiveData<Boolean> get() = _solved
 
+    private val shuffler = Shuffler()
+
     //TODO: Create a shuffled puzzle
-    private var puzzle15 = aSamplePuzzle()
-
+    private var puzzle15 = shuffler()
     private val _currentPuzzle = MutableLiveData(puzzle15)
-    val currentPuzzle: LiveData<Puzzle15> get() = _currentPuzzle
 
+    val currentPuzzle: LiveData<Puzzle15> get() = _currentPuzzle
     private val _loading = MutableLiveData(false)
+
     val loading: LiveData<Boolean> get() = _loading
 
     fun start() {
 
         _loading.value = true
 
-        puzzle15 = aSamplePuzzle()
+        puzzle15 = shuffler()
 
         viewModelScope.launch {
             val photo = photoRepository.getRandom()
