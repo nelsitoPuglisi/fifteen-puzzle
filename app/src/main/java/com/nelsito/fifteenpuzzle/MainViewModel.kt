@@ -1,14 +1,10 @@
 package com.nelsito.fifteenpuzzle
 
-import android.R.attr
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import android.R.attr.bitmap
-
-
 
 
 class MainViewModel : ViewModel() {
@@ -16,10 +12,9 @@ class MainViewModel : ViewModel() {
     private val _pieces = MutableLiveData<List<Bitmap>>()
     val pieces: LiveData<List<Bitmap>> get() = _pieces
 
-    fun onCreate(bitmapDrawable: BitmapDrawable) {
-        //load bitmap
-        //load game with bitmap
-        _pieces.value = splitImage(bitmapDrawable.bitmap)
+    fun onCreate(scaledBitmap: Bitmap) {
+        //TODO: Load image from api
+        _pieces.value = splitImage(scaledBitmap)
     }
 
     private fun splitImage(bitmap: Bitmap): List<Bitmap> {
@@ -46,3 +41,5 @@ class MainViewModel : ViewModel() {
 
 
 }
+
+data class BoardSize(val w: Int, val h: Int)
