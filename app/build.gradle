@@ -12,6 +12,7 @@ android {
         targetSdk 30
         versionCode 1
         versionName "1.0"
+        buildConfigField 'String', 'UNSPLAH_API_KEY', UnsplashApiKey
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -4,12 +4,19 @@ import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.nelsito.fifteenpuzzle.domain.Down
 import com.nelsito.fifteenpuzzle.domain.None
 import com.nelsito.fifteenpuzzle.domain.Puzzle15
+import com.nelsito.fifteenpuzzle.infrastructure.PhotoRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 
 class MainViewModel : ViewModel() {
+
+    private val photoRepository = PhotoRepository()
 
     private val _pieces = MutableLiveData<List<BitmapTile>>()
     val pieces: LiveData<List<BitmapTile>> get() = _pieces
@@ -20,15 +27,20 @@ class MainViewModel : ViewModel() {
     private val _currentPuzzle = MutableLiveData(puzzle15)
     val currentPuzzle: LiveData<Puzzle15> get() = _currentPuzzle
 
-    fun start(scaledBitmap: Bitmap) {
+    fun start() {
 
         puzzle15 = aSamplePuzzle()
 
         //TODO: Load image from api
-        val splitted = splitImage(scaledBitmap)
 
-        _pieces.value = puzzle15.tiles.map {
-            BitmapTile(splitted[it.correctNumber - 1], it)
+        viewModelScope.launch {
+            val photo = photoRepository.getRandom()
+            val bitmap = async(Dispatchers.IO) { photoRepository.getBitmap(photo.urls.regular) }
+            val splitted = splitImage(bitmap.await())
+
+            _pieces.value = puzzle15.tiles.map {
+                BitmapTile(splitted[it.correctNumber - 1], it)
+            }
         }
     }
 

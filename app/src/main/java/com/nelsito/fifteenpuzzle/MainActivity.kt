@@ -43,6 +43,8 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        //Every time the puzzle is updated, the tiles are assigned to the ImageViews
+        //So that each Tile has the proper movement to do...
         mainViewModel.currentPuzzle.observe(this, { puzzle ->
             binding.board.children.forEach { view ->
                  view.tag = puzzle.tiles.first {
@@ -52,9 +54,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         binding.btnStart.setOnClickListener {
-            //TODO: load from unsplash api
-            val bitmapDrawable = getDrawable(R.drawable.unsplash) as BitmapDrawable
-            mainViewModel.start(crop(bitmapDrawable.bitmap))
+            mainViewModel.start()
         }
     }
 
@@ -70,25 +70,5 @@ class MainActivity : AppCompatActivity() {
         params.leftMargin = newLocation.left
         imageView.layoutParams = params
 
-    }
-
-    private fun crop(bitmap: Bitmap): Bitmap {
-        if (bitmap.width >= bitmap.height){
-            return Bitmap.createBitmap(
-                bitmap,
-                bitmap.width /2 - bitmap.height /2,
-                0,
-                bitmap.height,
-                bitmap.height
-            )
-        }else{
-            return Bitmap.createBitmap(
-                bitmap,
-                0,
-                bitmap.height /2 - bitmap.width /2,
-                bitmap.width,
-                bitmap.width
-            )
-        }
     }
 }
