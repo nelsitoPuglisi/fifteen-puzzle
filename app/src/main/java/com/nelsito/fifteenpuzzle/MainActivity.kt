@@ -26,21 +26,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         mainViewModel.pieces.observe(this, { tiles ->
-            /*binding.tile1.setImageBitmap(pieces[0])
-            binding.tile2.setImageBitmap(pieces[1])
-            binding.tile3.setImageBitmap(pieces[2])
-            binding.tile4.setImageBitmap(pieces[3])
-            binding.tile5.setImageBitmap(pieces[4])
-            binding.tile6.setImageBitmap(pieces[5])
-            binding.tile7.setImageBitmap(pieces[6])
-            binding.tile8.setImageBitmap(pieces[7])
-            binding.tile9.setImageBitmap(pieces[8])
-            binding.tile10.setImageBitmap(pieces[9])
-            binding.tile11.setImageBitmap(pieces[10])
-            binding.tile12.setImageBitmap(pieces[11])
-            binding.tile13.setImageBitmap(pieces[12])
-            binding.tile14.setImageBitmap(pieces[13])
-            binding.tile15.setImageBitmap(pieces[14])*/
             tiles.forEach {
                 if (it.startIndex < 15) {
                     val iv = ImageView(applicationContext)
@@ -54,7 +39,6 @@ class MainActivity : AppCompatActivity() {
                     binding.board.addView(iv, params)
                 }
             }
-
         })
 
 
