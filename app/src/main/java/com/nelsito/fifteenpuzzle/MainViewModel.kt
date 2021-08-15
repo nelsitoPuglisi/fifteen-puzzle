@@ -26,9 +26,12 @@ class MainViewModel : ViewModel() {
 
     private fun createTiles(puzzle15: Puzzle15, splitted: List<Bitmap>): List<Tile> {
         val tiles = mutableListOf<Tile>()
-
+        //tile 0 is blank
+        //tile 1 should be index 0
         for (index in puzzle15.tiles.indices) {
-            tiles.add(Tile(puzzle15.tiles[index], index, splitted[puzzle15.tiles[index]]))
+            if (puzzle15.tiles[index] > 0) {
+                tiles.add(Tile(puzzle15.tiles[index], index, splitted[puzzle15.tiles[index] - 1]))
+            }
         }
 
         return tiles
@@ -65,4 +68,4 @@ class MainViewModel : ViewModel() {
 
 }
 
-data class TileLocation(val right: Int, val top: Int)
+data class TileLocation(val left: Int, val top: Int)

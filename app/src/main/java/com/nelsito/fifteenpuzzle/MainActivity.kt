@@ -1,6 +1,7 @@
 package com.nelsito.fifteenpuzzle
 
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +10,10 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.activity.viewModels
 import com.nelsito.fifteenpuzzle.databinding.ActivityMainBinding
+import android.util.DisplayMetrics
+
+
+
 
 class MainActivity : AppCompatActivity() {
     private val mainViewModel by viewModels<MainViewModel>()
@@ -37,17 +42,18 @@ class MainActivity : AppCompatActivity() {
             binding.tile14.setImageBitmap(pieces[13])
             binding.tile15.setImageBitmap(pieces[14])*/
             tiles.forEach {
-                val iv = ImageView(applicationContext)
-                iv.setImageBitmap(it.bitmap)
-                iv.tag = it
+                if (it.startIndex < 15) {
+                    val iv = ImageView(applicationContext)
+                    iv.setImageBitmap(it.bitmap)
+                    iv.tag = it
 
-                it.startIndex % 4
-                val right =
-                (iv.layoutParams as RelativeLayout.LayoutParams).addRule(RelativeLayout.ALIGN_RIGHT, )
-
-                binding.board.addView(iv)
+                    val location = it.locate(binding.board.width)
+                    val params = RelativeLayout.LayoutParams(binding.board.width / 4, binding.board.width / 4)
+                    params.topMargin = location.top
+                    params.leftMargin = location.left
+                    binding.board.addView(iv, params)
+                }
             }
-            //TODO position each image as the puzzle suggest
 
         })
 
@@ -55,18 +61,8 @@ class MainActivity : AppCompatActivity() {
         binding.btnStart.setOnClickListener {
             //TODO: load from unsplash api
             val bitmapDrawable = getDrawable(R.drawable.unsplash) as BitmapDrawable
-            mainViewModel.start(cropAndScale(bitmapDrawable.bitmap))
+            mainViewModel.start(crop(bitmapDrawable.bitmap))
         }
-    }
-
-    private fun cropAndScale(bitmap: Bitmap): Bitmap {
-        val cropped = crop(bitmap)
-        //TODO Scale image to square relative layout size
-        Log.d("SCALE", "cropped.w: " + cropped.width)
-        Log.d("SCALE", "cropped.h: " + cropped.height)
-        Log.d("SCALE", "layout.w: " + binding.board.width)
-        Log.d("SCALE", "layout.h: " + binding.board.height)
-        return cropped
     }
 
     private fun crop(bitmap: Bitmap): Bitmap {
