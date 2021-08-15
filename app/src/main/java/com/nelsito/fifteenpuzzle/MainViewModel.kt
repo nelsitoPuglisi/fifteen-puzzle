@@ -23,6 +23,9 @@ class MainViewModel : ViewModel() {
     private val _solved = MutableLiveData(false)
     val solved: LiveData<Boolean> get() = _solved
 
+    private val _backgroundColor = MutableLiveData<String>()
+    val backgroundColor: LiveData<String> get() = _backgroundColor
+
     private val shuffler = Shuffler()
 
     //TODO: Create a shuffled puzzle
@@ -42,6 +45,9 @@ class MainViewModel : ViewModel() {
 
         viewModelScope.launch {
             val photo = photoRepository.getRandom()
+
+            _backgroundColor.value = photo.color
+
             val bitmap = async(Dispatchers.IO) { photoRepository.getBitmap(photo.urls.regular) }
             val splitted = splitImage(bitmap.await())
 

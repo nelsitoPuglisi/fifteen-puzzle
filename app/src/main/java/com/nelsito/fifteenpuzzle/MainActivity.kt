@@ -1,6 +1,7 @@
 package com.nelsito.fifteenpuzzle
 
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +14,7 @@ import androidx.core.view.allViews
 import androidx.core.view.children
 import com.nelsito.fifteenpuzzle.databinding.ActivityMainBinding
 import com.nelsito.fifteenpuzzle.domain.None
+import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity() {
@@ -41,6 +43,14 @@ class MainActivity : AppCompatActivity() {
                     iv.setOnClickListener { tileSelected(it) }
                     binding.board.addView(iv, params)
                 }
+            }
+        })
+
+        mainViewModel.backgroundColor.observe(this, {
+            try {
+                binding.mainLayout.setBackgroundColor(Color.parseColor(it))
+            }catch(ex: Exception) {
+
             }
         })
 
